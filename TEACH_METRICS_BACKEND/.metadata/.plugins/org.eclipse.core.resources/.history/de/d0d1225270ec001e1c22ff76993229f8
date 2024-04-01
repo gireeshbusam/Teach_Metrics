@@ -1,0 +1,27 @@
+package com.adtFinalProject.teachMetrics.service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.stereotype.Service;
+
+import com.adtFinalProject.teachMetrics.model.CandidatesModel;
+
+@Service
+public class RecruitServiceImpl implements RecruitService {
+	
+	@Autowired
+    private MongoTemplate mongoTemplate;
+	@Autowired
+    private DataAccessBase dataAccessBase;
+
+	public HashMap<String, Object> fetchCandidates() {
+		HashMap<String, Object> response = new HashMap<String, Object>(); 
+		List<CandidatesModel> candidatesList = new ArrayList<CandidatesModel>();
+		
+		return response;
+	}
+}

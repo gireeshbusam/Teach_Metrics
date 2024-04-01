@@ -1,0 +1,5 @@
+package com.adtFinalProject.teachMetrics.model;
+
+public class RecruitStatusModel {
+
+}

@@ -1,0 +1,69 @@
+<div class="container-fluid background screenHeight">
+    <div class="row mt-3">
+        <div class="col-3 text-end">
+            <img src="../../assets/assessment.png" class="assessmentsImg" alt="">
+        </div>
+        <div class="col-6 text-start px-5 heading">TeachMetrics Assessment</div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 text-end timer" style="padding-right: 3%;">
+            Time Left: {{ formatTimeLeft() }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            <img src="../../assets/exam.png" class="examIcon" alt="">
+        </div>
+        <div class="col-8 assessment-container">
+            <div class="applicants-wrapper">
+                <div class="applicants">
+                    <div class="card">
+                        <h5 class="card-header text_heading">
+                          <div class="row">
+                            <div class="col-6">Assessment</div>
+                            <div class="col-6">
+                        
+                            </div>
+                          </div>
+                        </h5>
+                        <div class="card-body text_body spacing" *ngFor="let al of assessmentsList; let i = index;">
+                            <span>
+                                
+                                <span class="card-text">
+                                    <div>
+                                        {{i + 1}}. &nbsp; {{al.question}}
+                                    </div>
+                                    <div>
+                                        <input type="radio" name="{{al.id}}" (change)="chosenOption('option_a', al.id)">&nbsp; a. {{al.option_a}}
+                                    </div>
+                                    <div>
+                                        <input type="radio" name="{{al.id}}" (change)="chosenOption('option_b', al.id)">&nbsp; b. {{al.option_b}}
+                                    </div>
+                                    <div *ngIf="al.option_c != null">
+                                        <input type="radio" name="{{al.id}}" (change)="chosenOption('option_c', al.id)">&nbsp; c. {{al.option_c}}
+                                    </div>
+                                    <div *ngIf="al.option_d != null">
+                                        <input type="radio" name="{{al.id}}" (change)="chosenOption('option_d', al.id)">&nbsp; d. {{al.option_d}}
+                                    </div>
+                                </span>
+                                <div class="line_separator mt-3"></div>
+                            </span>       
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-8 text-end">
+                <span>
+                    <button *ngIf="!submitFlag && assessmentFlag == 'N'" class="button text_body" style="width: 21%;" (click)="startTimer()">Start Assessment</button>
+                    <button *ngIf="submitFlag" class="button text_body" style="width: 21%;" (click)="submitAssessment()">Submit Assessment</button>
+                </span>
+            </div>
+        </div>
+
+        <div class="col-2"></div>
+    </div>
+</div>

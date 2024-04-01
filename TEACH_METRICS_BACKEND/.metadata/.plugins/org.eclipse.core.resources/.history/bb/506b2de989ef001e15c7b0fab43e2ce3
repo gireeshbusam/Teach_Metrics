@@ -1,0 +1,21 @@
+package com.adtFinalProject.teachMetrics.service;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class ValidationUtil {
+	public static boolean isValidInput(String input) {
+        // Define the pattern for special characters
+        Pattern pattern = Pattern.compile("[{}\"\\\\%&'()*+,-./:;<=>?\\[|\\t\\n]+");
+        
+        // Check if there are more than one consecutive special character
+        Matcher matcher = pattern.matcher(input);
+        while (matcher.find()) {
+            if (matcher.group().length() > 1) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+}

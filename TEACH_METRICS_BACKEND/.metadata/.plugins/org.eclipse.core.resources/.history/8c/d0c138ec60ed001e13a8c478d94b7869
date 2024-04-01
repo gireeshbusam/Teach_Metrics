@@ -1,0 +1,11 @@
+package com.adtFinalProject.teachMetrics.service;
+
+import java.util.HashMap;
+
+import com.adtFinalProject.teachMetrics.model.profileModel;
+
+public interface RecruitService {
+
+	public HashMap<String, Object> fetchCandidates();
+	public HashMap<String, Object> selectCandidate(profileModel pm);
+}

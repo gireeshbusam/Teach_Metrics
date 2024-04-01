@@ -1,0 +1,35 @@
+package com.adtFinalProject.teachMetrics.service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Service;
+
+import com.adtFinalProject.teachMetrics.model.CandidatesModel;
+import com.adtFinalProject.teachMetrics.model.userModel;
+
+@Service
+public class RecruitServiceImpl implements RecruitService {
+	
+	@Autowired
+    private MongoTemplate mongoTemplate;
+	@Autowired
+    private DataAccessBase dataAccessBase;
+
+	public HashMap<String, Object> fetchCandidates() {
+		HashMap<String, Object> response = new HashMap<String, Object>(); 
+		List<CandidatesModel> candidatesList = new ArrayList<CandidatesModel>();
+		
+		MongoTemplate mongoTemplate = dataAccessBase.createMongoTemplate();
+		
+		Query query = new Query(Criteria.where("accVerified").is("A"));
+    	List<userModel> approvedList = mongoTemplate.find(query, userModel.class);
+		
+		return response;
+	}
+}

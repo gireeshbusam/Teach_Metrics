@@ -1,0 +1,42 @@
+package com.adtFinalProject.teachMetrics.service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.stereotype.Service;
+
+import com.adtFinalProject.teachMetrics.model.RecruitStatusModel;
+import com.adtFinalProject.teachMetrics.model.ResultsModel;
+
+@Service
+public class AnalysisServiceImpl {
+
+	@Autowired
+    private MongoTemplate mongoTemplate;
+	@Autowired
+    private DataAccessBase dataAccessBase;
+	
+	public HashMap<String, Object> fetchResults() {
+		HashMap<String, Object> response = new HashMap<String, Object>();
+		
+		MongoTemplate mongoTemplate = dataAccessBase.createMongoTemplate();
+		
+		List<ResultsModel> resultsList = mongoTemplate.findAll(ResultsModel.class);
+		
+		if(!resultsList.isEmpty()) {
+			response.put("resultsList", resultsList);
+		}
+		
+		return response;
+	}
+	
+	public HashMap<String, Object> fetchRecruitStatus() {
+		HashMap<String, Object> response = new HashMap<String, Object>();
+		List<RecruitStatusModel> recruitStatusList = new ArrayList<RecruitStatusModel>();
+		
+		return response;
+	}
+}

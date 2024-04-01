@@ -1,0 +1,97 @@
+<div class="container-fluid background screenHeight">
+
+    <div class="row mt-3">
+        <div class="col-3 text-end">
+            <img src="../../assets/teacher.png" class="teacherImg" alt="">
+        </div>
+        <div class="col-5 text-start px-5 heading">Recruiters Homepage</div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12 applicants-container">
+            <div class="applicants-wrapper">
+                <div *ngFor="let cl of candidatesList; let i = index;" class="applicants">
+                    <div class="card">
+                        <h5 class="card-header text_heading">
+                          {{cl.candidateName}}
+                        </h5>
+                        <div class="card-body text_body">
+                          <p class="card-text">Email: {{cl.emailId}}</p>
+                          <p class="card-text">Contact: {{cl.contact}}</p>
+
+                          <div class="row">
+                            <div class="col-12 text-center">
+                                <span>
+                                    <button class="button text_body" style="width: 25%;" (click)="openViewPopup(cl.accId);">View Profile</button>
+                                </span>
+                                <span class="px-2">
+                                    <button class="button text_body" style="width: 35%;" (click)="selectCandidate(cl.accId, cl.emailId);">Select Candidate</button>
+                                </span>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Profile Popup Start -->
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayStyle}">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text_heading">{{candidateData.candidateName}}</h4>
+                </div>
+                <div class="modal-body text_body">
+                    <div class="row">
+                        <div class="col-6"></div>
+                        <div class="col-6"></div>
+                    </div>
+                    <div>TeachMetrics Assessment Score: {{candidateData.score}}/30</div>
+                    <div>TeachMetrics Assessment Percentage: {{candidateData.percentage}}%</div>
+                    <div>Experience: {{candidateData.exp}}</div>
+                    <div>Email: {{candidateData.emailId}}</div>
+                    <div>Contact: {{candidateData.contact}}</div>
+                    <div>Address: {{candidateData.address}}, {{candidateData.postalCode}}</div>
+                    
+                    <div class="row mt-4">
+                        <div>Supporting Documents</div>
+                        <div style="height: 225px; overflow-y: auto;">
+                            <table class="table mt-2">
+                                <thead class="tableHead_layout">
+                                    <tr>
+                                        <th class="col-6 tableHead_layout text-center">File Name</th>
+                                        <th class="col-6 tableHead_layout text-center">Download</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="tableBody_layout">
+                                    <tr *ngFor="let fl of filesList; let i = index;">
+                                        <td class="col-6 text-center">{{fl.fileName}}</td>
+                                        <td class="col-6 text-center" (click)="downloadFile(fl.id);">Download</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <div class="row mt-3">
+                        <div class="col-12 text-center">
+                            <span>
+                                <button class="button text_body" style="width: 15%;" (click)="closeViewPopup();">Close</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" (click)="closeViewPopup();">
+                        Close
+                    </button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <!-- View Profile Popup End -->
+
+</div>

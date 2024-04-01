@@ -1,0 +1,41 @@
+.assessmentsImg {
+    height: 100px;
+    width: 100px;
+}
+
+.examIcon {
+    height: 225px;
+    width: 225px;
+    margin-top: 45%;
+    margin-left: 16%;
+}
+
+.assessment-container {
+    height: 422px;
+    overflow-y: auto;
+}
+
+.timer {
+    font-family: 'Russo One';
+    font-weight: bolder;
+    font-size: x-large;
+}
+
+.line_separator {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-color: #e6e6e6;
+    height: 1px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.spacing {
+    padding-bottom: 0px !important;
+}
+
+input[type="radio"] {
+    vertical-align: middle;
+}

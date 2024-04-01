@@ -1,0 +1,14 @@
+.adminImg {
+    height: 100px;
+    width: 100px;
+}
+
+.approve {
+    height: 27px;
+    cursor: pointer;
+}
+
+.reject {
+    height: 27px;
+    cursor: pointer;
+}

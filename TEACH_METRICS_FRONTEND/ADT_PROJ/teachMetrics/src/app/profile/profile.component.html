@@ -1,0 +1,162 @@
+<div class="container-fluid background screenHeightProf">
+    <div class="row mt-5">
+        <div class="col-5 text-center">
+            <img src="../../assets/registration.png" class="registrationImg" alt="">
+            <div *ngIf="!profileFlag" class="heading">Create a Profile</div>
+            <div *ngIf="profileFlag" class="heading">Update Profile</div>
+        </div>
+        <div class="col-7">
+            <div class="card" style="width: 100%;">
+                <div class="card-body text_body" style="padding-top: 0px !important;
+                padding-bottom: 0px !important;
+                padding-right: 11px !important;">
+                    <div class="row">
+                        <div class="col-6" style="padding-top: 2%; padding: 3%;">
+                            <span style="font-weight: bold; font-size: x-large;">
+                                Contact Information
+                            </span>
+                            <div class="mt-4">
+                                <div class="row">
+                                    <div class="col-5">First Name:</div>
+                                    <div class="col-5" *ngIf="!profileFlag">
+                                        <input type="text" [(ngModel)]="fName">
+                                    </div>
+                                    <div class="col-5" *ngIf="profileFlag">
+                                        <input type="text" value="{{fName}}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="row">
+                                    <div class="col-5">Last Name:</div>
+                                    <div class="col-5" *ngIf="!profileFlag">
+                                        <input type="text" [(ngModel)]="lName">
+                                    </div>
+                                    <div class="col-5" *ngIf="profileFlag">
+                                        <input type="text" value="{{lName}}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="row">
+                                    <div class="col-5">Contact Number:</div>
+                                    <div class="col-5"><input type="text" [(ngModel)]="contact"></div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="row">
+                                    <div class="col-5">Address:</div>
+                                    <div class="col-5"><input type="text" [(ngModel)]="address"></div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="row">
+                                    <div class="col-5">Postal Code:</div>
+                                    <div class="col-5"><input type="text" [(ngModel)]="postalCode"></div>
+                                </div>
+                            </div>
+
+                            <div class="mt-5">
+                                <span>
+                                    <button *ngIf="!profileFlag" class="button text_body" style="width: 33%;" 
+                                    (click)="submitProfile();">Submit Profile</button>
+                                    <button *ngIf="profileFlag" class="button text_body" style="width: 33%;" 
+                                    (click)="updateProfile();">Update Profile</button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-6 eduQuali" style="padding: 3%;">
+                            <span style="font-weight: bold; font-size: x-large;">
+                                Education Qualification
+                            </span>
+                            <div class="mt-4">
+                                <div class="row">
+                                    <div class="col-4">Experience:</div>
+                                    <div class="col-5"><input type="text" [(ngModel)]="exp"></div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="row">
+                                    <div class="col-4">Documents:</div>
+                                    <div class="col-2">
+                                        <button class="button text_body" (click)="openUploadPopup();">
+                                            Upload</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="button text_body" style="margin-left: 27%;" 
+                                        (click)="openViewPopup();">View</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View User's Documents Popup Start -->
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayStyle}">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text_heading">View Supporting Documents</h4>
+                </div>
+                <div class="modal-body text_body">
+                    <table class="table mt-2">
+                        <thead class="tableHead_layout">
+                            <tr>
+                                <th class="col-6 tableHead_layout text-center">File Name</th>
+                                <th class="col-6 tableHead_layout text-center">Download</th>
+                            </tr>
+                        </thead>
+                        <tbody class="tableBody_layout">
+                            <tr *ngFor="let fl of filesList; let i = index;">
+                                <td class="col-6 text-center">{{fl.fileName}}</td>
+                                <td class="col-6 text-center" (click)="downloadFile(fl.id);">Download</td>
+                            </tr>
+                        </tbody>
+                    </table>
+    
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <span>
+                                <button class="button text_body" style="width: 15%;" (click)="closeViewPopup();">Close</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- View User's Documents Popup End -->
+
+    <!-- Upload Supporting Documents Popup Start -->
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':uploadDisplayStyle}">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text_heading">Upload Supporting Documents</h4>
+                </div>
+                <div class="modal-body text_body">
+                    <input type="file" name="fileInput" (change)="onFileSelected($event)">
+                    <span>
+                        <button class="button text_body" style="width: 15%; margin-left: 15%;"
+                        (click)="upload();">Upload</button>
+                    </span>
+    
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <span>
+                                <button class="button text_body" style="width: 15%;" (click)="closeUploadPopup();">Close</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Upload Supporting Documents Popup End -->
+</div>

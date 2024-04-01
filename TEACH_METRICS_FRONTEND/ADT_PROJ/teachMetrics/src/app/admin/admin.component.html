@@ -1,0 +1,74 @@
+<div class="container-fluid background screenHeight">
+    <div class="row mt-3">
+        <div class="col-3 text-end">
+            <img src="../../assets/admin.png" class="adminImg" alt="">
+        </div>
+        <div class="col-6 text-start px-5 heading">TeachMetrics Admin</div>
+    </div>
+
+    <table class="table mt-2">
+        <thead class="tableHead_layout">
+            <tr>
+                <th class="col-2 tableHead_layout text-center">Email ID</th>
+                <th class="col-2 tableHead_layout text-center">Name</th>
+                <th class="col-2 tableHead_layout text-center">Contact Number</th>
+                <th class="col-2 tableHead_layout text-center">Experience</th>
+                <th class="col-2 tableHead_layout text-center">Documents</th>
+                <th class="col-2 tableHead_layout text-center">Approve/Reject</th>
+            </tr>
+        </thead>
+        <tbody class="tableBody_layout">
+            <tr *ngFor="let upm of userProfilesModel; let i = index;">
+                <td class="col-2 text-center">{{upm.emailId}}</td>
+                <td class="col-2 text-center">{{upm.name}}</td>
+                <td class="col-2 text-center">{{upm.contact}}</td>
+                <td class="col-2 text-center">{{upm.exp}}</td>
+                <td class="col-2 text-center" (click)="openViewPopup(upm.accId);">Click to view</td>
+                <td class="col-2 text-center">
+                    <span>
+                        <img src="../../assets/approve.png" title="Click to approve profile" 
+                            alt="" class="approve" (click)="approveReject('A', upm.emailId);">
+                        <img src="../../assets/decline.png" title="Click to reject profile" 
+                            alt="" class="reject" (click)="approveReject('R', upm.emailId);">
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- View User's Documents Popup Start -->
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayStyle}">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text_heading">GeeksForGeeks</h4>
+                </div>
+                <div class="modal-body text_body">
+                    <table class="table mt-2">
+                        <thead class="tableHead_layout">
+                            <tr>
+                                <th class="col-6 tableHead_layout text-center">File Name</th>
+                                <th class="col-6 tableHead_layout text-center">Download</th>
+                            </tr>
+                        </thead>
+                        <tbody class="tableBody_layout">
+                            <tr *ngFor="let fl of filesList; let i = index;">
+                                <td class="col-6 text-center">{{fl.fileName}}</td>
+                                <td class="col-6 text-center" (click)="downloadFile(fl.id);">Download</td>
+                            </tr>
+                        </tbody>
+                    </table>
+    
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <span>
+                                <button class="button text_body" style="width: 15%;" (click)="closeViewPopup();">Close</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- View User's Documents Popup End -->
+</div>

@@ -1,0 +1,62 @@
+package com.adtFinalProject.teachMetrics.model;
+
+public class CandidatesModel {
+
+	private int id;
+	private String candidateName;
+	private String about;
+	private String exp;
+	private String contact;
+	private String address;
+	private String postalCode;
+	private String emailId;
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getCandidateName() {
+		return candidateName;
+	}
+	public void setCandidateName(String candidateName) {
+		this.candidateName = candidateName;
+	}
+	public String getAbout() {
+		return about;
+	}
+	public void setAbout(String about) {
+		this.about = about;
+	}
+	public String getExp() {
+		return exp;
+	}
+	public void setExp(String exp) {
+		this.exp = exp;
+	}
+	public String getContact() {
+		return contact;
+	}
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getPostalCode() {
+		return postalCode;
+	}
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
+	}
+	public String getEmailId() {
+		return emailId;
+	}
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
+}

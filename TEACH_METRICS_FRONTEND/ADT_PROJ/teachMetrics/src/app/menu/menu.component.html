@@ -1,0 +1,33 @@
+<div class="container-fluid background">
+    <div class="row nav">
+        <div class="col-6">
+            <div class="row">
+                <div [ngClass]="{'col-3 text-center': menuFlag === 'R'}" *ngIf="menuFlag === 'R'">
+                    <span id="dashboard" class="nav-link" 
+                    [class.active]="subMenuFlag === 'D'" 
+                    (click) = "toggleTab('D')">Dashboard</span>
+                </div>
+                <div [ngClass]="{'col-3 text-center': menuFlag === 'C'}" *ngIf="menuFlag === 'C'">
+                    <span id="profile" class="nav-link" 
+                    [class.active]="subMenuFlag === 'P'" 
+                    (click) = "toggleTab('P')">Profile</span>
+                </div>
+                <div [ngClass]="{'col-3 text-center': menuFlag === 'C'}" *ngIf="menuFlag === 'C' && assessmentFlag === 'N'">
+                    <span id="assessment" class="nav-link" 
+                    [class.active]="subMenuFlag === 'T'" 
+                    (click) = "toggleTab('T')">Assessment</span>
+                </div>
+                <div *ngIf="menuFlag != 'A'" class="nav-item col-3 text-center">
+                    <span id="analysis" class="nav-link" 
+                    [class.active]="subMenuFlag === 'A'"
+                    (click) = "toggleTab('A')">Analysis Reports</span>
+                </div>               
+            </div>
+        </div>
+        
+        <div class="col-6 text-end">
+            <span><img src="../../assets/logout.png" (click)="logout();" style="display: inline-block;" 
+                title="Click to Logout" class="px-2 logoutImage" alt=""></span>
+        </div>
+    </div>
+</div>

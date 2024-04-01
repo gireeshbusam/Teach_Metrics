@@ -1,0 +1,126 @@
+<div class="container-fluid background screenHeightHome">
+    <div class="row mt-5">
+        <div class="col-8">
+            <div class="row" style="margin-top: 12%;">
+                <div class="col-5 text-end">
+                    <img src="../../assets/classroom.png" class="logo" alt="">
+                </div>
+                <div class="col-7 px-5 heading" style="margin-top: 12%;">Teach Metrics</div>
+            </div>
+        </div>
+        <div class="col-4 text_body" style="margin-top: 8%;">
+            <div class="row mt-3">
+                <div class="col-12 text-start">
+                    <button id="eUser" class="button_tab text_body" style="width: 25%;" (click)="toggleTab('E')">Existing User</button>
+                    <button id="nUser" class="button_tab text_body" style="width: 25%; margin-left: 10px;" (click)="toggleTab('N')">
+                        New User</button>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class = "col-3 py-1">
+                    Email: 
+                </div>
+                <div class="col-5">
+                    <input type="text" [(ngModel)]="emailId">
+                </div>
+                <div class="col-1">
+                    <img *ngIf="credFlag" src="../../assets/verify.png" title="Unique Code Verified Successfully!" 
+                    alt="" class="check_icon">
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class = "col-3 py-1">
+                    Password: 
+                </div>
+                <div class="col-5">
+                    <input type="password" [(ngModel)]="password">
+                </div>
+                <div class="col-1">
+                    <img *ngIf="credFlag" src="../../assets/verify.png" title="Unique Code Verified Successfully!" 
+                    alt="" class="check_icon">
+                </div>
+            </div>
+
+            <div *ngIf="generatedFlag && !verifiedFlag" class="row mt-4">
+                <div class="col-3 py-1">
+                    Enter Code: 
+                </div>
+                <div class="col-5">
+                    <input type="text" [(ngModel)]="userToken">
+                </div>
+                <div class="col-1">
+                    <img *ngIf="verifiedFlag" src="../../assets/verify.png" title="Unique Code Verified Successfully!" 
+                    alt="" class="check_icon">
+                </div>
+            </div>
+
+            <div *ngIf="tabTypeKey == 'N'">
+                <div class="row">
+                    <span class="col-12 mt-4">
+                        Are you a Teacher or a Recruiter?                
+                    </span>
+                </div>
+    
+                <div class="row">
+                    <div class="col-4">
+                        <input type="radio" (change)="userType('T');" name="teach"> I am a Teacher
+                    </div>
+                    <div class="col-4">
+                        <input type="radio" class="px-5" (change)="userType('R');" name="teach"> I am a Recruiter
+                    </div>
+                </div>
+    
+                <div class="row mt-3">
+                    <!-- <div *ngIf="userTypeKey == 'T'">
+                        Please provide the following detail(s)
+    
+                        <div class="row mt-3">
+                            <div class="col-3 py-1">
+                                Experience:
+                            </div>
+                            <div class="col-6">
+                                <input type="text">
+                            </div>
+                        </div>
+    
+                        <div class="row">
+                            
+                        </div>
+                    </div> -->
+    
+                    <div *ngIf="userTypeKey == 'R'">
+                        Please provide the following detail(s)
+                        <div class="row mt-3">
+                            <div class="col-3 py-1">
+                                Institution:
+                            </div>
+                            <div class="col-6">
+                                <input type="text" [(ngModel)]="institutionName">
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-12">
+                    <button *ngIf="tabTypeKey == 'N'" class="button text_body" 
+                    style="width: 25%; margin-left: 25%;" (click)="register();">Register</button>
+
+                    <span class="text_body" *ngIf="tabTypeKey == 'E'">
+                        <button class="button text_body"
+                        style="width: 27%;" *ngIf="!verifiedFlag" (click)="generateTTLCode();">Generate Code</button>
+
+                        <button class="button text_body"
+                        style="width: 27%; margin-left: 2%;" *ngIf="!verifiedFlag && generatedFlag" (click)="verifyTTLCode();">Verify Code</button>
+
+                        <button class="button text_body" 
+                        style="width: 25%; margin-left: 2%;" *ngIf="verifiedFlag" (click)="login();">Login</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

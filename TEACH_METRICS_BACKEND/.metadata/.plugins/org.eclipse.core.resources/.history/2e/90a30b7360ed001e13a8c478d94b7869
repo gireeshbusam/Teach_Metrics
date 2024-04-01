@@ -1,0 +1,8 @@
+package com.adtFinalProject.teachMetrics.service;
+
+import java.util.HashMap;
+
+public interface RecruitService {
+
+	public HashMap<String, Object> fetchCandidates();
+}

@@ -1,0 +1,323 @@
+package com.adtFinalProject.teachMetrics.service;
+
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.WriteResultChecking;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.adtFinalProject.teachMetrics.model.counterModel;
+import com.adtFinalProject.teachMetrics.model.profileModel;
+import com.adtFinalProject.teachMetrics.model.userModel;
+import com.adtFinalProject.teachMetrics.model.userTTLCodeModel;
+import com.adtFinalProject.teachMetrics.repository.userRepository;
+import com.adtFinalProject.teachMetrics.repository.userTTLCodeRepository;
+
+@Service
+public class RegistrationServiceImpl implements RegistrationService {
+	
+	@Autowired
+    private JavaMailSender mailSender;
+	@Autowired
+	private userRepository repo;
+	private PasswordEncoder passwordEncoder;
+	@Autowired
+    private MongoTemplate mongoTemplate;
+	@Autowired
+    private DataAccessBase dataAccessBase;
+	@Autowired
+	private userTTLCodeRepository ttlRepo;
+	
+	@Autowired
+    public RegistrationServiceImpl(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public void sendSimpleEmail(String toEmail, String subject, String body) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("teachmetrics@gmail.com");
+        message.setTo(toEmail);
+        message.setText(body);
+        message.setSubject(subject);
+        mailSender.send(message);
+        System.out.println("Mail Send...");
+    }
+    
+    public HashMap<String, Object> register(@RequestBody userModel um) {
+    	HashMap<String, Object> response = new HashMap<String, Object>();
+    	
+    	MongoTemplate mongoTemplate = dataAccessBase.createMongoTemplate();
+    	mongoTemplate.setWriteResultChecking(WriteResultChecking.EXCEPTION);
+		
+		try {
+			Query query = new Query(Criteria.where("emailId").is(um.getEmailId()));
+			List<userModel> result = mongoTemplate.find(query, userModel.class);
+			
+			String password = passwordEncoder.encode(um.getPassword());
+			
+			if(password != null && !password.isEmpty()) {
+				um.setPassword(password);
+			}
+			
+			if(result.isEmpty()) {
+				counterModel counters = counter();
+				
+				if(counters != null) {
+			    	Query cQuery = new Query();
+			    	cQuery.with(Sort.by(Sort.Direction.DESC, "_id"));
+			    	cQuery.limit(1);
+			    	
+			    	counterModel counter = mongoTemplate.findOne(cQuery, counterModel.class);
+			    	
+			    	if(counter != null) {
+			    		um.setAccId(counter.getValue());
+			    		mongoTemplate.insert(um);
+						response.put("responseMessage", "User Registered Successfully.");
+						response.put("responseCode", 1000);
+			    	} else {
+						response.put("responseMessage", "User Registration failed.");
+						response.put("responseCode", 9999);
+					}			    	
+				} else {
+					response.put("responseMessage", "User Registration failed.");
+					response.put("responseCode", 9999);
+				}				
+				
+				//generateTTLCode(um, mongoTemplate);
+			} else {
+				for(int i = 0; i < result.size(); i++) {
+					if(result.get(i).getUserId() != null && !result.get(i).getUserId().isEmpty()) {
+						if(result.get(i).getEmailId().equalsIgnoreCase(um.getEmailId())) {
+							response.put("responseMessage", "User already exists. Please try logging in.");
+							response.put("responseCode", 9999);
+						}
+					}
+				}
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			response.put("responseMessage", "User Registration failed.");
+			response.put("responseCode", 9999);
+		}
+		
+		return response;
+    }
+    
+	public HashMap<String, Object> generateTTLCode(userModel um) {
+    	HashMap<String, Object> response = new HashMap<String, Object>();
+		MongoTemplate mongoTemplate = dataAccessBase.createMongoTemplate();
+    	
+    	Query query = new Query(Criteria.where("emailId").is(um.getEmailId()));
+    	List<userModel> result = mongoTemplate.find(query, userModel.class);
+    	
+    	userTTLCodeModel utt = new userTTLCodeModel();
+    	LocalDateTime currentDateTime = LocalDateTime.now();
+    	
+    	if(result.size() <= 0) {
+    		response.put("responseMessage", "User doesn't exist. Please try again.");
+			response.put("responseCode", 8888);
+			response.put("generatedFlag", false);
+			
+			return response;
+    	}
+    	
+    	String password = result.get(0).getPassword();
+    	String inputPassword = um.getPassword();
+		
+		if(passwordEncoder.matches(inputPassword, password)) {
+			response.put("responseMessage", "Success");
+			response.put("responseCode", 1111);
+			response.put("credFlag", true);
+		} else {
+			response.put("responseMessage", "Invalid Credentials");
+			response.put("responseCode", 9999);
+			response.put("credFlag", false);
+			
+			return response;
+		}
+		
+    	utt.setUserId(result.get(0).getUserId());
+    	utt.setEmailId(result.get(0).getEmailId());
+    	utt.setCreatedAt(currentDateTime);
+    	
+    	int rand = genRandomCode(9);
+    	utt.setRandToken(rand);
+    	
+    	userTTLCodeModel res = ttlRepo.genTTLCode(result.get(0).getUserId(), result.get(0).getEmailId());
+    	
+    	if(res != null) {
+    		mongoTemplate.remove(res);
+    		
+    		res = ttlRepo.genTTLCode(result.get(0).getUserId(), result.get(0).getEmailId());
+    		if(res == null) {
+    			mongoTemplate.insert(utt);
+    		}    		
+    	} else {
+    		mongoTemplate.insert(utt);
+    	}	
+    	
+    	res = null;
+    	res = ttlRepo.genTTLCode(result.get(0).getUserId(), result.get(0).getEmailId());
+    	
+    	if(res != null) {
+    		StringBuilder sb = new StringBuilder();
+    		sb.append("Please enter this Temporary Code to validate your account");
+    		sb.append(System.getProperty("line.separator"));
+    		sb.append("Code: ");
+    		sb.append(rand);
+    		sb.append(System.getProperty("line.separator"));
+    		sb.append("This code is set to expire in 60 seconds.");
+    		
+    		String body = sb.toString();
+    		
+    		String subject = "TeachMetrics Temporary Code for Verification";
+    		
+    		//sendSimpleEmail(um.getEmailId(), subject, body);
+    		
+    		response.put("responseMessage", "TTL Code has been generated successfully.");
+			response.put("responseCode", 1000);
+			response.put("generatedFlag", true);
+    	} else {
+    		response.put("responseMessage", "TTL Code not generated. Please try again.");
+			response.put("responseCode", 9999);
+			response.put("generatedFlag", false);
+    	}
+    	
+    	return response;
+    }
+    
+    public int genRandomCode(int length) {
+    	SecureRandom random = new SecureRandom();
+    	
+    	int min = (int) Math.pow(10, length - 1);
+    	int max = (int) Math.pow(10, length) - 1;
+    	
+    	int rand = random.nextInt(max - min + 1) + min;
+    	
+    	return rand;
+    }
+    
+    public HashMap<String, Object> login(@RequestBody userModel um) {
+    	HashMap<String, Object> response = new HashMap<String, Object>();
+    	
+    	MongoTemplate mongoTemplate = dataAccessBase.createMongoTemplate();
+    	
+    	Query query = new Query(Criteria.where("emailId").is(um.getEmailId()));
+    	List<userModel> result = mongoTemplate.find(query, userModel.class);
+    	
+    	String password = result.get(0).getPassword();
+    	String inputPassword = um.getPassword();
+		
+		if(passwordEncoder.matches(inputPassword, password)) {
+			response.put("responseMessage", "Success");
+			response.put("responseCode", 1000);
+			response.put("userRole", result.get(0).getUserType());
+			response.put("accVerified", result.get(0).getAccVerified());
+		} else {
+			response.put("responseMessage", "Invalid Credentials");
+			response.put("responseCode", 9999);
+		}
+    	
+    	return response;
+    }
+    
+    
+    public HashMap<String, Object> verifyTTLCode(userModel um) {
+    	HashMap<String, Object> response = new HashMap<String, Object>();
+    	
+    	MongoTemplate mongoTemplate = dataAccessBase.createMongoTemplate();
+    	
+    	Query query = new Query(Criteria.where("emailId").is(um.getEmailId()));
+    	List<userModel> result = mongoTemplate.find(query, userModel.class);
+    	
+    	userTTLCodeModel res = ttlRepo.genTTLCode(result.get(0).getUserId(), result.get(0).getEmailId());
+    	
+    	if(res == null) {
+    		response.put("responseMessage", "Token expired. Please try again.");
+			response.put("responseCode", 8888);
+			response.put("verifiedFlag", false);
+			return response;
+    	}
+    	
+    	if(result.get(0).getUserId().equalsIgnoreCase(res.getUserId())) {
+    		if(um.getUserToken() == res.getRandToken()) {
+    			response.put("responseMessage", "Success");
+    			response.put("responseCode", 1000);
+    			response.put("verifiedFlag", true);
+    		} else {
+    			response.put("responseMessage", "Invalid Token. Please try again.");
+    			response.put("responseCode", 9999);
+    			response.put("verifiedFlag", false);
+    		}
+    	}
+    	
+    	return response;
+    }
+    
+    public counterModel counter() {
+    	MongoTemplate mongoTemplate = dataAccessBase.createMongoTemplate();
+    	counterModel counters = new counterModel();
+    	
+    	Query query = new Query();
+    	query.with(Sort.by(Sort.Direction.DESC, "_id"));
+    	query.limit(1);
+    	
+    	counters = mongoTemplate.findOne(query, counterModel.class);
+    	
+		if(counters == null) {
+			counters = new counterModel();
+			counters.setValue(1);
+			mongoTemplate.insert(counters);
+		} else {
+			Update update = new Update().inc("value", 1);
+			counters = mongoTemplate.findAndModify(query, update, counterModel.class);
+		}
+		
+		return counters;
+    }
+    
+    public HashMap<String, Object> submitProfile(profileModel pm) {
+    	HashMap<String, Object> response = new HashMap<String, Object>();
+    	
+    	MongoTemplate mongoTemplate = dataAccessBase.createMongoTemplate();
+    	
+    	Query query = new Query(Criteria.where("emailId").is(pm.getEmailId()));
+    	List<userModel> result = mongoTemplate.find(query, userModel.class);
+    	
+    	if(!result.isEmpty()) {
+    		pm.setAccId(result.get(0).getAccId());
+    	}
+    	
+    	mongoTemplate.insert(pm);
+    	
+    	List<profileModel> res = mongoTemplate.find(query, profileModel.class);
+    	
+    	if(!res.isEmpty()) {
+    		response.put("responseMessage", "Profile Submitted Successfully");
+			response.put("responseCode", 1000);
+    	} else {
+    		response.put("responseMessage", "Something went wrong");
+			response.put("responseCode", 9999);
+    	}
+    	
+    	return response;
+    }
+    
+    public HashMap<String, Object> fetchProfile(String emailId) {
+    	HashMap<String, Object> response = new HashMap<String, Object>();
+    	
+    	return response;
+    }
+}

@@ -1,0 +1,148 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,100&family=Russo+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Share&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Share&display=swap');
+
+.screenHeight {
+    min-height: 651px;
+    max-height: 651px;
+}
+
+.background {
+    background-color: #dfe5f0;
+    padding-top: 1%;
+    background-image: url(../src/assets/background.jpg);
+}
+
+select {
+    display: block;
+    padding-left: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    font-family: "PT Sans", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: var(--bs-body-color);
+    /* appearance: none; */
+    background-color: var(--bs-body-bg);
+    background-clip: padding-box;
+    height: 30px;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 1.24);
+    border-radius: 8px;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.heading {
+    font-family: 'Russo One';
+    font-weight: bolder;
+    font-size: xxx-large;
+}
+
+.text_body {
+    font-family: "PT Sans", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.text_heading {
+    font-family: "PT Sans", sans-serif;
+    font-weight: bolder;
+    font-size: large;
+    font-style: normal;
+}
+
+.button {
+    background-color: #a4c1f5;
+    border: #a4c1f5;
+    color: #161617;
+    border-radius: 7px;
+    padding-left: 11px;
+    padding-right: 11px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.button_tab {
+    background-color: #fcfcfc;
+    border: #fcfcfc;
+    color: #161617;
+    border-radius: 7px;
+    padding-left: 11px;
+    padding-right: 11px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.button_tab:active {
+    transform: scale(1.1);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    background-color: #9d56cc;
+    border: #9d56cc;
+}
+
+button:hover {
+    transform: scale(1.1);
+}
+
+.active {
+    background-color: #9d56cc;
+}
+
+.modal-header {
+    height: 25px;
+    background-color: #c1eff8 !important;
+}
+
+.modal-body {
+    background-color: #f0fdff !important;
+    border-bottom-left-radius: 9px;
+    border-bottom-right-radius: 9px;
+}
+
+.card {
+    width: 100%;
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    margin-top: 20px;
+}
+
+.card-header {
+    background-color: #c1eff8 !important;
+}
+
+.card-body {
+    background-color: #f0fdff !important;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+table {
+    border: 1px solid;
+    border-color: #E6E6E6;
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
+
+/* td {
+    border: 1px solid;
+    border-color: #E6E6E6;
+} */
+
+.tableHead_layout {
+    font-family: "PT Sans", sans-serif;
+    font-weight: 800;
+    font-size: large;
+    background-color: #c1eff8 !important;
+    color: black !important;
+    height: 45px;   
+}
+
+.tableBody_layout {
+    font-family: "PT Sans", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+input[disabled] {
+    background: #aeb0af !important;
+    cursor: not-allowed !important;
+}

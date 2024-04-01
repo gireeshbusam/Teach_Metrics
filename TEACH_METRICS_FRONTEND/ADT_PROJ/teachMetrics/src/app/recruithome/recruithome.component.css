@@ -1,0 +1,21 @@
+.teacherImg {
+    height: 100px;
+    width: 100px;
+}
+
+.applicants-container {
+    height: 465px;
+    overflow-y: auto;
+}
+
+.applicants-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 25px;
+}
+
+.applicants {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

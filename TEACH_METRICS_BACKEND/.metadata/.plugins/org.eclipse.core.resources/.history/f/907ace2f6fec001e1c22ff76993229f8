@@ -1,0 +1,13 @@
+package com.adtFinalProject.teachMetrics.service;
+
+import java.util.HashMap;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class RecruitServiceImpl implements RecruitService {
+
+	public HashMap<String, Object> fetchCandidates() {
+		HashMap<String, Object> response = new HashMap<String, Object>(); 
+	}
+}

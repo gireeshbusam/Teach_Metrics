@@ -1,0 +1,38 @@
+package com.adtFinalProject.teachMetrics;
+
+import java.util.Properties;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@Configuration
+@EnableMongoAuditing
+public class SecurityConfig {
+	@Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+	
+	@Bean
+    public JavaMailSender javaMailSender() { 
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+		mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(587);
+        mailSender.setUsername("tmetrics08@gmail.com");
+        mailSender.setPassword("dlvfncicifnavpyp");
+
+        // Enable SMTP authentication
+        Properties props = mailSender.getJavaMailProperties();
+        props.put("mail.smtp.auth", "true");
+
+        // Enable STARTTLS encryption
+        props.put("mail.smtp.starttls.enable", "true");
+
+        return mailSender;
+    }
+}

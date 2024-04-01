@@ -1,0 +1,13 @@
+package com.adtFinalProject.teachMetrics.model;
+
+public class CandidatesModel {
+
+	private int id;
+	private String candidateName;
+	private String about;
+	private String exp;
+	private String contact;
+	private String address;
+	private String postalCode;
+	private String emailId;
+}
